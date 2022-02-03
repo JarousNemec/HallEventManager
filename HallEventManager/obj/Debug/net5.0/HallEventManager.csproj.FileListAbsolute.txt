@@ -1,0 +1,16 @@
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\bin\Debug\net5.0\HallEventManager.exe
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\bin\Debug\net5.0\HallEventManager.deps.json
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\bin\Debug\net5.0\HallEventManager.runtimeconfig.json
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\bin\Debug\net5.0\HallEventManager.runtimeconfig.dev.json
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\bin\Debug\net5.0\HallEventManager.dll
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\bin\Debug\net5.0\ref\HallEventManager.dll
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\bin\Debug\net5.0\HallEventManager.pdb
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\obj\Debug\net5.0\HallEventManager.csproj.AssemblyReference.cache
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\obj\Debug\net5.0\HallEventManager.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\obj\Debug\net5.0\HallEventManager.AssemblyInfoInputs.cache
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\obj\Debug\net5.0\HallEventManager.AssemblyInfo.cs
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\obj\Debug\net5.0\HallEventManager.csproj.CoreCompileInputs.cache
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\obj\Debug\net5.0\HallEventManager.dll
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\obj\Debug\net5.0\ref\HallEventManager.dll
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\obj\Debug\net5.0\HallEventManager.pdb
+C:\Projekty\CSharpFiles\HallEventManager\HallEventManager\obj\Debug\net5.0\HallEventManager.genruntimeconfig.cache
