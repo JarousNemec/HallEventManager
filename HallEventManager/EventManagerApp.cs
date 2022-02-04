@@ -8,7 +8,6 @@ namespace HallEventManager
     {
         private Manager manager;
         private Hall hall;
-
         private const string SAVE_PATH = "data.hallmanager";
 
         public EventManagerApp()
