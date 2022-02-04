@@ -52,8 +52,10 @@ namespace HallEventManager
                 {
                     Console.WriteLine(@event);
                 }
+
                 Console.WriteLine();
             }
+
             Console.WriteLine("Možnosti: ");
             Console.WriteLine("1) Přidat událost");
             Console.WriteLine("2) Přidat zaměstnance");
@@ -123,7 +125,7 @@ namespace HallEventManager
                 {
                     if (hall.GetEmployees().Count != 0)
                     {
-                        PrintAllEmployes();
+                        PrintAllEmployees();
                     }
                 }
                     break;
@@ -178,18 +180,9 @@ namespace HallEventManager
         private List<Employee> SelectEmployeesForEvent()
         {
             var selectedEmployees = new List<Employee>();
-            var selectedEmployeesIndexes = new List<int>();
-            var choosing = true;
-            var cursor = 0;
-            while (choosing)
-            {
-                Console.Clear();
-                Console.WriteLine("Mezerníkem vyberte zaměstnance a výběr potvrďte klávesou ENTER");
-                PrintChossingMenu(cursor, selectedEmployeesIndexes, hall.GetEmployees());
-                HandleChossingMenu(ref cursor, selectedEmployeesIndexes, ref choosing,
-                    hall.GetEmployees().Count);
-            }
-
+            var selectedEmployeesIndexes =
+                GetSelectedItemsIndexes("Mezerníkem vyberte zaměstnance a výběr potvrďte klávesou ENTER",
+                    hall.GetEmployees());
             if (selectedEmployeesIndexes.Count != 0)
             {
                 foreach (var index in selectedEmployeesIndexes)
@@ -203,18 +196,10 @@ namespace HallEventManager
 
         private void RemoveEmployees()
         {
-            var selectedEmployeesIndexes = new List<int>();
-            var choosing = true;
-            var cursor = 0;
-            while (choosing)
-            {
-                Console.Clear();
-                Console.WriteLine(
-                    "Mezerníkem vyberte zaměstnance, které chcete odstranit, a výběr potvrďte klávesou ENTER");
-                PrintChossingMenu(cursor, selectedEmployeesIndexes, hall.GetEmployees());
-                HandleChossingMenu(ref cursor, selectedEmployeesIndexes, ref choosing,
-                    hall.GetEmployees().Count);
-            }
+            var selectedEmployeesIndexes =
+                GetSelectedItemsIndexes(
+                    "Mezerníkem vyberte zaměstnance, které chcete odstranit, a výběr potvrďte klávesou ENTER",
+                    hall.GetEmployees());
 
             if (selectedEmployeesIndexes.Count != 0)
             {
@@ -222,21 +207,28 @@ namespace HallEventManager
             }
         }
 
-        private void RemoveEvents()
+        private List<int> GetSelectedItemsIndexes<T>(string label, List<T> items)
         {
-            var selectedEventsIndexes = new List<int>();
+            var selectedItemsIndexes = new List<int>();
             var choosing = true;
             var cursor = 0;
             while (choosing)
             {
                 Console.Clear();
-                Console.WriteLine(
-                    "Mezerníkem vyberte události, které chcete odstranit, a výběr potvrďte klávesou ENTER");
-                PrintChossingMenu(cursor, selectedEventsIndexes, manager.GetEvents());
-                HandleChossingMenu(ref cursor, selectedEventsIndexes, ref choosing,
-                    manager.GetEvents().Count);
+                Console.WriteLine(label);
+                PrintChossingMenu(cursor, selectedItemsIndexes, items);
+                HandleChossingMenu(ref cursor, selectedItemsIndexes, ref choosing,
+                    items.Count);
             }
 
+            return selectedItemsIndexes;
+        }
+
+        private void RemoveEvents()
+        {
+            var selectedEventsIndexes = GetSelectedItemsIndexes(
+                "Mezerníkem vyberte události, které chcete odstranit, a výběr potvrďte klávesou ENTER",
+                manager.GetEvents());
             if (selectedEventsIndexes.Count != 0)
             {
                 manager.RemoveEvents(selectedEventsIndexes);
@@ -286,7 +278,7 @@ namespace HallEventManager
 
         private void PrintChossingMenu<T>(int cursor, List<int> selectedEmployeesIndexes, List<T> items)
         {
-            for (int i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
                 if (i == cursor && selectedEmployeesIndexes.Contains(i))
                 {
@@ -395,7 +387,7 @@ namespace HallEventManager
             Console.ReadKey();
         }
 
-        private void PrintAllEmployes()
+        private void PrintAllEmployees()
         {
             Console.Clear();
             Console.WriteLine("Zaměstnanci: ");
