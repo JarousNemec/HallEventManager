@@ -23,5 +23,26 @@ namespace HallEventManager
         {
             return events;
         }
+
+        public void RemoveEvents(List<int> indexesToRemove)
+        {
+            var deletedEvent = new Event("", DateTime.Now, new List<Employee>(), "");
+            foreach (var index in indexesToRemove)
+            {
+                events[index] = deletedEvent;
+            }
+
+            for (int i = 0; i < indexesToRemove.Count; i++)
+            {
+                foreach (var @event in events)
+                {
+                    if (@event == deletedEvent)
+                    {
+                        events.Remove(@event);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

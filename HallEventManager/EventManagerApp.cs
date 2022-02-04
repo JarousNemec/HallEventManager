@@ -8,7 +8,7 @@ namespace HallEventManager
     {
         private Manager manager;
         private Hall hall;
-        
+
         private const string SAVE_PATH = "data.hallmanager";
 
         public EventManagerApp()
@@ -52,31 +52,34 @@ namespace HallEventManager
                 {
                     Console.WriteLine(@event);
                 }
-
                 Console.WriteLine();
             }
-
             Console.WriteLine("Možnosti: ");
             Console.WriteLine("1) Přidat událost");
             Console.WriteLine("2) Přidat zaměstnance");
             if (manager.GetEvents().Count != 0)
             {
                 Console.WriteLine("3) Zobrazit podrobnosti o události");
+                Console.WriteLine("4) Odebrat událost");
             }
 
             if (hall.GetEmployees().Count != 0)
             {
-                Console.WriteLine("4) Zobrazit seznam zaměstnanců");
+                Console.WriteLine("5) Zobrazit seznam zaměstnanců");
+                Console.WriteLine("6) Odebrat zaměstnance");
             }
 
-            Console.WriteLine("5) Odejít");
+            Console.WriteLine("7) Odejít");
         }
 
         private const string ADD_EVENT = "1";
         private const string ADD_EMPLOYEE = "2";
         private const string SHOW_EVENT_INFO = "3";
-        private const string SHOW_EMPLOYEES = "4";
-        private const string EXIT = "5";
+        private const string SHOW_EMPLOYEES = "5";
+        private const string REMOVE_EMPLOYEE = "6";
+        private const string REMOVE_EVENT = "4";
+        private const string EXIT = "7";
+
         private void HandleInput()
         {
             switch (Console.ReadLine())
@@ -98,6 +101,16 @@ namespace HallEventManager
                     EmployeeAddForm();
                 }
                     break;
+                case REMOVE_EMPLOYEE:
+                {
+                    RemoveEmployees();
+                }
+                    break;
+                case REMOVE_EVENT:
+                {
+                    RemoveEvents();
+                }
+                    break;
                 case SHOW_EVENT_INFO:
                 {
                     if (manager.GetEvents().Count != 0)
@@ -117,7 +130,7 @@ namespace HallEventManager
                 case EXIT:
                 {
                     run = false;
-                    var save = new Save(manager,hall);
+                    var save = new Save(manager, hall);
                     save.SaveData(SAVE_PATH);
                 }
                     break;
@@ -172,74 +185,128 @@ namespace HallEventManager
             {
                 Console.Clear();
                 Console.WriteLine("Mezerníkem vyberte zaměstnance a výběr potvrďte klávesou ENTER");
-                for (int i = 0; i < hall.GetEmployees().Count; i++)
-                {
-                    if (i == cursor && selectedEmployeesIndexes.Contains(i))
-                    {
-                        Console.Write($"[■] ");
-                    }
-                    else if (i == cursor && !selectedEmployeesIndexes.Contains(i))
-                    {
-                        Console.Write($"[ ] ");
-                    }
-                    else if (i != cursor && selectedEmployeesIndexes.Contains(i))
-                    {
-                        Console.Write($" ■  ");
-                    }
-                    else if (i != cursor && !selectedEmployeesIndexes.Contains(i))
-                    {
-                        Console.Write($"    ");
-                    }
+                PrintChossingMenu(cursor, selectedEmployeesIndexes, hall.GetEmployees());
+                HandleChossingMenu(ref cursor, selectedEmployeesIndexes, ref choosing,
+                    hall.GetEmployees().Count);
+            }
 
-                    Console.WriteLine(hall.GetEmployees()[i]);
-                }
-
-                switch (Console.ReadKey().Key)
+            if (selectedEmployeesIndexes.Count != 0)
+            {
+                foreach (var index in selectedEmployeesIndexes)
                 {
-                    case ConsoleKey.UpArrow:
-                    {
-                        if (cursor - 1 >= 0)
-                        {
-                            cursor--;
-                        }
-                    }
-                        break;
-                    case ConsoleKey.DownArrow:
-                    {
-                        if (cursor + 1 < hall.GetEmployees().Count)
-                        {
-                            cursor++;
-                        }
-                    }
-                        break;
-                    case ConsoleKey.Spacebar:
-                    {
-                        if (selectedEmployeesIndexes.Contains(cursor))
-                        {
-                            selectedEmployeesIndexes.Remove(cursor);
-                        }
-                        else
-                        {
-                            selectedEmployeesIndexes.Add(cursor);
-                        }
-                    }
-                        break;
-                    case ConsoleKey.Enter:
-                    {
-                        choosing = false;
-                        if (selectedEmployeesIndexes.Count != 0)
-                        {
-                            foreach (var index in selectedEmployeesIndexes)
-                            {
-                                selectedEmployees.Add(hall.GetEmployees()[index]);
-                            }
-                        }
-                    }
-                        break;
+                    selectedEmployees.Add(hall.GetEmployees()[index]);
                 }
             }
 
             return selectedEmployees;
+        }
+
+        private void RemoveEmployees()
+        {
+            var selectedEmployeesIndexes = new List<int>();
+            var choosing = true;
+            var cursor = 0;
+            while (choosing)
+            {
+                Console.Clear();
+                Console.WriteLine(
+                    "Mezerníkem vyberte zaměstnance, které chcete odstranit, a výběr potvrďte klávesou ENTER");
+                PrintChossingMenu(cursor, selectedEmployeesIndexes, hall.GetEmployees());
+                HandleChossingMenu(ref cursor, selectedEmployeesIndexes, ref choosing,
+                    hall.GetEmployees().Count);
+            }
+
+            if (selectedEmployeesIndexes.Count != 0)
+            {
+                hall.RemoveEmployees(selectedEmployeesIndexes);
+            }
+        }
+
+        private void RemoveEvents()
+        {
+            var selectedEventsIndexes = new List<int>();
+            var choosing = true;
+            var cursor = 0;
+            while (choosing)
+            {
+                Console.Clear();
+                Console.WriteLine(
+                    "Mezerníkem vyberte události, které chcete odstranit, a výběr potvrďte klávesou ENTER");
+                PrintChossingMenu(cursor, selectedEventsIndexes, manager.GetEvents());
+                HandleChossingMenu(ref cursor, selectedEventsIndexes, ref choosing,
+                    manager.GetEvents().Count);
+            }
+
+            if (selectedEventsIndexes.Count != 0)
+            {
+                manager.RemoveEvents(selectedEventsIndexes);
+            }
+        }
+
+        private void HandleChossingMenu(ref int cursor, List<int> selectedEmployeesIndexes, ref bool choosing,
+            int maxIndex)
+        {
+            switch (Console.ReadKey().Key)
+            {
+                case ConsoleKey.UpArrow:
+                {
+                    if (cursor - 1 >= 0)
+                    {
+                        cursor--;
+                    }
+                }
+                    break;
+                case ConsoleKey.DownArrow:
+                {
+                    if (cursor + 1 < maxIndex)
+                    {
+                        cursor++;
+                    }
+                }
+                    break;
+                case ConsoleKey.Spacebar:
+                {
+                    if (selectedEmployeesIndexes.Contains(cursor))
+                    {
+                        selectedEmployeesIndexes.Remove(cursor);
+                    }
+                    else
+                    {
+                        selectedEmployeesIndexes.Add(cursor);
+                    }
+                }
+                    break;
+                case ConsoleKey.Enter:
+                {
+                    choosing = false;
+                }
+                    break;
+            }
+        }
+
+        private void PrintChossingMenu<T>(int cursor, List<int> selectedEmployeesIndexes, List<T> items)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (i == cursor && selectedEmployeesIndexes.Contains(i))
+                {
+                    Console.Write($"[■] ");
+                }
+                else if (i == cursor && !selectedEmployeesIndexes.Contains(i))
+                {
+                    Console.Write($"[ ] ");
+                }
+                else if (i != cursor && selectedEmployeesIndexes.Contains(i))
+                {
+                    Console.Write($" ■  ");
+                }
+                else if (i != cursor && !selectedEmployeesIndexes.Contains(i))
+                {
+                    Console.Write($"    ");
+                }
+
+                Console.WriteLine(items[i]);
+            }
         }
 
         private DateTime GetDateWhenEventHappensFromUser()
